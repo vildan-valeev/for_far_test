@@ -1,0 +1,74 @@
+version: '3.7'
+
+services:
+  bot_tg:
+    build:
+      context: ./bot_tg
+      dockerfile: Dockerfile
+#    command: sh -c "./wait-for-it.sh web:8000 -- python3 bot.py"
+    command: python3 bot.py
+    depends_on:
+      - web
+    networks:
+      - ttk
+
+  bot_vk:
+    build:
+      context: ./bot_vk
+      dockerfile: Dockerfile
+    command: python3 bot.py
+    depends_on:
+      - redis
+      - db
+    networks:
+      - ttk
+#  redis:
+#    restart: unless-stopped
+#    image: redis:latest
+#    volumes:
+#      - redis_data:/data
+#    ports:
+#      - "6379:6379"
+#    networks:
+#      - ttk
+#  db:
+#    image: postgres
+#    container_name: postgres_db
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data/
+##      - ./compose/postgres/initdb:/docker-entrypoint-initdb.d
+#    environment:
+#      - POSTGRES_NAME=postgres
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#
+#    restart: unless-stopped
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      - ttk
+
+
+  web:
+    build:
+      context: ./web
+      dockerfile: web/Dockerfile.dev
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    volumes:
+      - ./web:/app/
+    networks:
+      - ttk
+    depends_on:
+      - bot_tg
+      - bot_vk
+
+
+volumes:
+  static_volume:
+  media_volume:
+
+networks:
+  ttk:
+    driver: bridge
