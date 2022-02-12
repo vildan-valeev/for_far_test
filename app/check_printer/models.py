@@ -7,14 +7,14 @@ CHECK_TYPE = [
 ]
 CHECK_STATUS = [
     ('new', 'New'),
-    ('rendered', 'Rendered'),
+    ('rendered', 'Rendered'),  # check create_pdf_check.py before edit
     ('printed', 'Printed'),
 ]
 
 
 class Check(models.Model):
     """
-
+    Чеки
     """
     printer_id = models.ForeignKey('Printer', on_delete=models.PROTECT, verbose_name='Принтер')
     type = models.CharField(max_length=50, choices=CHECK_TYPE, verbose_name='Тип')
@@ -32,7 +32,7 @@ class Check(models.Model):
 
 class Printer(models.Model):
     """
-
+    Принтеры
     """
     name = models.CharField(max_length=100, verbose_name='Имя', help_text='название принтера')
     api_key = models.CharField(unique=True, max_length=100, verbose_name='Ключ', help_text='ключ доступа к API')
