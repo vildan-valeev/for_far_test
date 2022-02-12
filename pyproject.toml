@@ -11,6 +11,7 @@ djangorestframework = "^3.13.1"
 environs = "^9.5.0"
 django-rq = "^2.5.1"
 requests = "^2.27.1"
+pdfkit = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 

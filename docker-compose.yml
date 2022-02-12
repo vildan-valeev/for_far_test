@@ -1,15 +1,7 @@
 version: '3.7'
 
 services:
-  pdf_gen:
-    container_name: pdf_gen
-    image: openlabs/docker-wkhtmltopdf-aas:latest
-    volumes:
-      - ./app/media:/data
-    ports:
-      - "7500:7500"
-    networks:
-      - for_far
+
   redis:
     container_name: redis
     restart: unless-stopped
@@ -50,7 +42,6 @@ services:
     networks:
       - for_far
     depends_on:
-      - pdf_gen
       - redis
 #      - db
 
@@ -67,7 +58,6 @@ services:
     networks:
       - for_far
     depends_on:
-      - pdf_gen
       - redis
       - app
 
