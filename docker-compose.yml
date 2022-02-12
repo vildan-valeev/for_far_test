@@ -1,55 +1,38 @@
 version: '3.7'
 
 services:
-  bot_tg:
-    build:
-      context: ./bot_tg
-      dockerfile: Dockerfile
-#    command: sh -c "./wait-for-it.sh web:8000 -- python3 bot.py"
-    command: python3 bot.py
-    depends_on:
-      - web
+  pdf_gen:
+    image: wkhtmltopdf
+
+
+  redis:
+    restart: unless-stopped
+    image: redis:latest
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
     networks:
-      - ttk
+      - for_far
+  db:
+    image: postgres
+    container_name: postgres_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+#      - ./compose/postgres/initdb:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
 
-  bot_vk:
-    build:
-      context: ./bot_vk
-      dockerfile: Dockerfile
-    command: python3 bot.py
-    depends_on:
-      - redis
-      - db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
     networks:
-      - ttk
-#  redis:
-#    restart: unless-stopped
-#    image: redis:latest
-#    volumes:
-#      - redis_data:/data
-#    ports:
-#      - "6379:6379"
-#    networks:
-#      - ttk
-#  db:
-#    image: postgres
-#    container_name: postgres_db
-#    volumes:
-#      - postgres_data:/var/lib/postgresql/data/
-##      - ./compose/postgres/initdb:/docker-entrypoint-initdb.d
-#    environment:
-#      - POSTGRES_NAME=postgres
-#      - POSTGRES_USER=postgres
-#      - POSTGRES_PASSWORD=postgres
-#
-#    restart: unless-stopped
-#    ports:
-#      - "5432:5432"
-#    networks:
-#      - ttk
+      - for_far
 
 
-  web:
+  app:
     build:
       context: ./web
       dockerfile: web/Dockerfile.dev
@@ -59,10 +42,10 @@ services:
     volumes:
       - ./web:/app/
     networks:
-      - ttk
+      - for_far
     depends_on:
-      - bot_tg
-      - bot_vk
+      - redid
+      - db
 
 
 volumes:
@@ -70,5 +53,5 @@ volumes:
   media_volume:
 
 networks:
-  ttk:
+  for_far:
     driver: bridge

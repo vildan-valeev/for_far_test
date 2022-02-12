@@ -23,14 +23,14 @@ class OrderSerializer(Serializer):
     point_id = IntegerField()
 
 
-class ChekSerializer(ModelSerializer):
+class CheckSerializer(ModelSerializer):
     class Meta:
         model = Check
         fields = ['id', ]
 
 
-class NewChecksSerializer(Serializer):
-    checks = ChekSerializer(many=True)
+# class NewChecksSerializer(Serializer):
+#     checks = CheckSerializer(many=True)
 
 
 class OkResponse(Serializer):
