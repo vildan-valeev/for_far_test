@@ -1,8 +1,8 @@
 version: '3.7'
 
 services:
-  pdf_generator:
-    container_name: pdf_generator
+  pdf_gen:
+    container_name: pdf_gen
     image: openlabs/docker-wkhtmltopdf-aas:latest
     volumes:
       - ./app/media:/data
@@ -11,6 +11,7 @@ services:
     networks:
       - for_far
   redis:
+    container_name: redis
     restart: unless-stopped
     image: redis:latest
     volumes:
@@ -19,29 +20,31 @@ services:
       - "6379:6379"
     networks:
       - for_far
-  db:
-    image: postgres
-    container_name: postgres_db
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-#      - ./compose/postgres/initdb:/docker-entrypoint-initdb.d
-    environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-
-    restart: unless-stopped
-    ports:
-      - "5432:5432"
-    networks:
-      - for_far
+#  db:
+#    image: postgres
+#    container_name: postgres_db
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data/
+##      - ./compose/postgres/initdb:/docker-entrypoint-initdb.d
+#    environment:
+#      - POSTGRES_NAME=postgres
+#      - POSTGRES_USER=postgres
+#      - POSTGRES_PASSWORD=postgres
+#
+#    restart: unless-stopped
+#    ports:
+#      - "5432:5432"
+#    networks:
+#      - for_far
 
 
   app:
     build:
       context: ./app
       dockerfile: app/Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000
+    command: "poetry run python manage.py runserver 0.0.0.0:8000"
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     volumes:
@@ -49,10 +52,14 @@ services:
     networks:
       - for_far
     depends_on:
-      - pdf_generator
-      - redid
-      - db
+      - pdf_gen
+      - redis
+#      - db
 
+  rq_worker:
+    container_name: rq_worker
+    build: ./app
+    command:b
 
 
 networks:
