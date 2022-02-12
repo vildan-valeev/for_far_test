@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 
 from check_printer.custom_responses import OkResponse, ErrorResponse
 from check_printer.serializers import OrderSerializer, CheckSerializer
-from check_printer.services import create_checks
+from check_printer.service.create_check import create_checks
 
 
 class CreateChecks(APIView):

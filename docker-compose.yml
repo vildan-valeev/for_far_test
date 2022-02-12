@@ -1,10 +1,15 @@
 version: '3.7'
 
 services:
-  pdf_gen:
-    image: wkhtmltopdf
-
-
+  pdf_generator:
+    container_name: pdf_generator
+    image: openlabs/docker-wkhtmltopdf-aas:latest
+    volumes:
+      - ./app/media:/data
+    ports:
+      - "7500:7500"
+    networks:
+      - for_far
   redis:
     restart: unless-stopped
     image: redis:latest
@@ -34,23 +39,21 @@ services:
 
   app:
     build:
-      context: ./web
-      dockerfile: web/Dockerfile.dev
+      context: ./app
+      dockerfile: app/Dockerfile
     command: python manage.py runserver 0.0.0.0:8000
     ports:
-      - 8000:8000
+      - "8000:8000"
     volumes:
-      - ./web:/app/
+      - ./app:/app/
     networks:
       - for_far
     depends_on:
+      - pdf_generator
       - redid
       - db
 
 
-volumes:
-  static_volume:
-  media_volume:
 
 networks:
   for_far:
