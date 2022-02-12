@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 CHECK_TYPE = [
     ('kitchen', 'Kitchen'),
     ('client', 'Client'),
