@@ -18,8 +18,8 @@ class Check(models.Model):
     """
     printer_id = models.ForeignKey('Printer', on_delete=models.PROTECT, verbose_name='Принтер')
     type = models.CharField(max_length=50, choices=CHECK_TYPE, verbose_name='Тип')
-    order = models.JSONField(verbose_name='Инфо', help_text='Информация о заказе')
-    status = models.CharField(max_length=50, choices=CHECK_STATUS, verbose_name='Статус', help_text='Статус чека')
+    order = models.JSONField(verbose_name='Заказ', help_text='Информация о заказе')
+    status = models.CharField(max_length=50, choices=CHECK_STATUS, default='new', verbose_name='Статус', help_text='Статус чека')
     pdf_file = models.FileField(verbose_name='Ссылка', help_text='ссылка на созданный PDF-файл')
 
     class Meta:
