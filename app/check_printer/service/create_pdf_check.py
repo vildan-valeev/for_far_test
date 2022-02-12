@@ -6,15 +6,19 @@ from django.template.loader import render_to_string
 from django_rq import job
 
 from check_printer.models import Check, CHECK_STATUS
+from src.settings import env
 
 
-@job
+# @job
 def generate_pdf(obj: Check):
     print(f'Запущена фоновая задача! создаем пдф файлы для  {obj.printer_id.name}')
     # time.sleep(5)
-    url = 'http://localhost:80/'
+    PDF_GEN_HOST = env.str('PDF_GEN_HOST')
+    PDF_GEN_PORT = env.str('PDF_GEN_PORT')
+    url = f'http://{PDF_GEN_HOST}:{PDF_GEN_PORT}/'
     # пропускаем данные через шаблон
     content = render_to_string(f'{obj.type}_check.html', obj.order)
+    print(content)
     # data = {'contents': open('/file/to/convert.html').read().encode('base64'),}
 
     # создаем данные для отправки на конвертацию

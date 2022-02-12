@@ -4,7 +4,7 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /app
 
-COPY poetry.lock pyproject.toml /app/
+COPY ./pyproject.toml ./poetry.lock /
 
 RUN pip3 install poetry
 

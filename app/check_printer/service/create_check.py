@@ -14,7 +14,8 @@ def create_checks(data: dict) -> Tuple[bool, str]:
             obj, created = Check.objects.get_or_create(printer_id=p, order=data, type=p.check_type)
             if not created:  # если такой json уже приходил
                 return False, 'Для данного заказа уже созданы чеки'
-            generate_pdf.delay(obj)
+            # generate_pdf.delay(obj)
+            generate_pdf(obj)
     else:
         return False, 'Для данной точки не настроено ни одного принтера'
     return True, message
