@@ -5,15 +5,13 @@
 
 
 # Development
-0. `mv .env.example .env`
-1. `make init_project` - for first run
-2. `make start` - runserver , redis, worker
-3. `make makemigrations` - dj command
-4. `make migrate` - dj command
+0. `mv .env.example .env.dev` - .env.dev for docker, .env for local
+1. `docker-compose up --build`
+2. `docker exec -it app python manage.py loaddata default_data.json` 
+
 
 
 ### TODO
-1. Makefile
 2. Запилить тесты
 3. фикстуры
 4. подключить postgres
