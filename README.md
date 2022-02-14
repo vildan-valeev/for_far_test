@@ -9,7 +9,7 @@
 1. `docker-compose up --build`
 2. `docker exec -it app python manage.py loaddata default_data.json` 
 
-
+`make test` - test
 
 ### TODO
 2. Запилить тесты
