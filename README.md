@@ -1,7 +1,7 @@
 # Решение тестового задания для разработчика на python - 
 ## Разработка микросервиса (обработка заказов, печать чеков)
 
-Подробнее об условиях можно [посмотреть тут](https://github.com/smenateam/assignments/blob/master/backend/README.md)
+Подробнее об условиях можно [посмотреть тут](https://github.com/vildan-valeev/for_far_test/blob/master/doc/task.md)
 
 
 # Development
