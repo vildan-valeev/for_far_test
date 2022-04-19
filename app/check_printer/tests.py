@@ -37,10 +37,7 @@ class CheckTestCase(TestCase):
         Printer.objects.create(name='Printer 2', api_key='zzzz3499', check_type='client', point_id=1)
         Printer.objects.create(name='Printer 3', api_key='zzrtez3499', check_type='kitchen', point_id=2)
         Printer.objects.create(name='Printer 4', api_key='jghjtez3499', check_type='client', point_id=2)
-        # TODO: add fake redis and Queue
-        # self.queue =Queue(is_async=False, connection=FakeStrictRedis())
-        # job = queue.enqueue(my_long_running_job)
-        # assert job.is_finished
+
 
     def test_create(self):
         """ """

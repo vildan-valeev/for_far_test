@@ -12,13 +12,11 @@ CHECK_STATUS = [
 
 
 class Check(models.Model):
-    """
-    Чеки
-    """
     printer_id = models.ForeignKey('Printer', on_delete=models.PROTECT, verbose_name='Принтер')
     type = models.CharField(max_length=50, choices=CHECK_TYPE, verbose_name='Тип')
     order = models.JSONField(verbose_name='Заказ', help_text='Информация о заказе')
-    status = models.CharField(max_length=50, choices=CHECK_STATUS, default='new', verbose_name='Статус', help_text='Статус чека')
+    status = models.CharField(max_length=50, choices=CHECK_STATUS, default='new', verbose_name='Статус',
+                              help_text='Статус чека')
     pdf_file = models.FileField(verbose_name='Ссылка', help_text='ссылка на созданный PDF-файл', null=True, blank=True)
 
     class Meta:
@@ -30,9 +28,6 @@ class Check(models.Model):
 
 
 class Printer(models.Model):
-    """
-    Принтеры
-    """
     name = models.CharField(max_length=100, verbose_name='Имя', help_text='название принтера')
     api_key = models.CharField(unique=True, max_length=100, verbose_name='Ключ', help_text='ключ доступа к API')
     check_type = models.CharField(max_length=100, choices=CHECK_TYPE, verbose_name='Тип',

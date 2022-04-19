@@ -1,13 +1,9 @@
-from collections import OrderedDict
-
-from django.http import HttpResponse
-from rest_framework.generics import ListAPIView, RetrieveAPIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from check_printer.custom_render import BinaryFileRenderer
 from check_printer.custom_responses import OkResponse, ErrorResponse
-from check_printer.models import Check
 from check_printer.serializers import OrderSerializer, CheckSerializer
 from check_printer.service.create_check import create_checks
 from check_printer.service.get_pdf_file import get_pdf_check_file
@@ -48,12 +44,8 @@ class CheckGetPDF(APIView):
     renderer_classes = (BinaryFileRenderer,)
 
     def get(self, request, *args, **kwargs):
-        # print(self.kwargs.get('api_key'), self.kwargs.get('check_id'))
         file, message, code = get_pdf_check_file(**kwargs)
-        # print(file)
         if file:
-            # return OkResponse('message', status=210)
-            print(file.name, file.path)
             with open(file.path, 'rb') as report:
                 return Response(
                     report.read(),

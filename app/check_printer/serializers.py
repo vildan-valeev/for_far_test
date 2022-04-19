@@ -29,10 +29,6 @@ class CheckSerializer(ModelSerializer):
         fields = ['id', ]
 
 
-# class NewChecksSerializer(Serializer):
-#     checks = CheckSerializer(many=True)
-
-
 class OkResponse(Serializer):
     ok = CharField()
 

@@ -7,7 +7,7 @@
 # Development
 0. `mv .env.example .env.dev` - .env.dev for docker, .env for local
 1. `docker-compose up --build`
-2. `docker exec -it app python manage.py loaddata default_data.json` 
+
 
 `make test` - test
 
