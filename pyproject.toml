@@ -8,11 +8,14 @@ authors = ["vildan-valeev <vildan.maydanovich.valeev@gmail.com>"]
 python = "^3.8"
 Django = "^4.0.2"
 djangorestframework = "^3.13.1"
-environs = "^9.5.0"
 django-rq = "^2.5.1"
 requests = "^2.27.1"
 pdfkit = "^1.0.0"
 fakeredis = "^1.7.1"
+django-split-settings = "^1.1.0"
+django-stubs-ext = "^0.4.0"
+python-decouple = "^3.6"
+psycopg2-binary = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 

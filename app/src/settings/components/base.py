@@ -1,32 +1,38 @@
-from pathlib import Path
+from typing import Tuple
 
-from environs import Env
+from decouple import Csv
 
-env = Env()
-env.read_env()
+from src.settings.components import config, BASE_DIR
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+SECRET_KEY = config('SECRET_KEY')
 
-SECRET_KEY = env.str('SECRET_KEY')
+DEBUG = config("DEBUG", False)
 
-DEBUG = env.bool("DEBUG", False)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv(), default=config('DOMAIN'))
 
-INSTALLED_APPS = [
+DJANGO_APPS: Tuple[str, ...] = (
     'django.contrib.admin',
     'django.contrib.auth',
+    'django.contrib.sites',  # for robots
+    'django.contrib.sitemaps',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+)
 
-    'rest_framework',
-    "django_rq",
-
+PROJECT_APPS: Tuple[str, ...] = (
     'check_printer.apps.CheckPrinterConfig',
+)
 
-]
+THIRD_PARTY_APPS: Tuple[str, ...] = (
+    'rest_framework',
+    'django_rq',
+)
 
-MIDDLEWARE = [
+INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + PROJECT_APPS
+
+MIDDLEWARE: Tuple[str, ...] = (
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -34,9 +40,21 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-]
+)
 
 ROOT_URLCONF = 'src.urls'
+
+DATABASES = {
+    "default": {
+        "ENGINE": config("SQL_ENGINE"),
+        "NAME": config("SQL_DATABASE"),
+        "USER": config("SQL_USER"),
+        "PASSWORD": config("SQL_PASSWORD"),
+        "HOST": config("SQL_HOST"),
+        "PORT": config("SQL_PORT", cast=int),
+        'CONN_MAX_AGE': config('CONN_MAX_AGE', cast=int, default=60),
+    }
+}
 
 TEMPLATES = [
     {
@@ -55,13 +73,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'src.wsgi.application'
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -84,30 +95,18 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+SITE_ID = 1  # for robots
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
-}
+PROJECT_NAME = config('PROJECT_NAME')
 
-RQ_QUEUES = {
-    'default': {
-        'HOST': env.str('REDIS_HOST', 'localhost'),
-        'PORT':  env.int("REDIS_PORT", 6379),
-        'DB': 0,
-        'DEFAULT_TIMEOUT': 360,
-    },
-
-}
-
-if DEBUG:
-    ALLOWED_HOSTS = ['*']
-else:
-    ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+REDIS_HOST = config("REDIS_HOST")
+REDIS_PORT = config("REDIS_PORT", cast=int, default=6379)
